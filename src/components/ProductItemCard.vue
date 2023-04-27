@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+import { PencilIcon, TrashIcon } from '@heroicons/vue/24/solid'
 
 import type { IProductItem } from '@/types/productItem'
 import type { IActionButton } from '@/types/common'
@@ -11,12 +12,12 @@ defineProps<{
 
 const actionButtons: IActionButton[] = [
   {
-    icon: '1',
+    icon: PencilIcon,
     classes: 'bg-blue-600',
     onClick: () => {},
   },
   {
-    icon: '2',
+    icon: TrashIcon,
     classes: 'bg-red-600',
     onClick: () => {},
   },
@@ -28,7 +29,7 @@ const handleSetIsAddSwipeTransition = (value: boolean) => {
 }
 
 const swipeOffset = ref<number>(0)
-const swipeOffsetMax = ref<number>(152)
+const swipeOffsetMax = ref<number>(137)
 const swipeStartXPosition = ref<number>(0)
 const swipeMoveXPosition = ref<number>(0)
 const handleShowButtons = () => {
@@ -107,10 +108,13 @@ const handleToggleRightMouseClick = () => {
         v-for="actionButton of actionButtons"
         :key="actionButton.icon"
         :class="actionButton.classes"
-        class="p-7 h-full flex items-center ml-3 rounded-lg text-white"
+        class="h-full w-14 flex items-center justify-center ml-3 rounded-lg cursor-pointer transition-transform active:scale-95"
         @click="actionButton.onClick"
       >
-        {{ actionButton.icon }}
+        <component
+          :is="actionButton.icon"
+          class="w-6 text-white"
+        />
       </div>
     </div>
   </div>

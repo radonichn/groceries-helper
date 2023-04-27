@@ -1,5 +1,7 @@
+import type { FunctionalComponent, HTMLAttributes, VNodeProps } from 'vue'
+
 export interface IActionButton {
-  icon: string
+  icon: FunctionalComponent<HTMLAttributes & VNodeProps>,
   classes: string | string[]
   onClick: Function
 }
