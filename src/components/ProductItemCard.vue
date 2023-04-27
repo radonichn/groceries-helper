@@ -22,7 +22,6 @@ const actionButtons: IActionButton[] = [
   },
 ]
 
-const swipeContainer = ref<HTMLDivElement | null>(null)
 const swipeOffset = ref<number>(0)
 const swipeOffsetMax = ref<number>(152)
 const swipeStartXPosition = ref<number>(0)
@@ -36,18 +35,21 @@ const handleHideButtons = () => {
 }
 const getTouchXPosition = (event: TouchEvent) => event.touches[0].pageX
 const handleTouchStart = (event: TouchEvent) => {
+  isAddSwipeTransition.value = false
   swipeStartXPosition.value = getTouchXPosition(event)
   hideBodyScroll()
 }
 const handleTouchMove = (event: TouchEvent) => {
-  if (!swipeContainer.value) {
-    return
-  }
-  const parentRightX = swipeContainer.value.offsetLeft + swipeContainer.value.offsetWidth
-  swipeOffset.value = parentRightX - getTouchXPosition(event)
   swipeMoveXPosition.value = getTouchXPosition(event)
+  const positionDelta = swipeStartXPosition.value - swipeMoveXPosition.value
+  if (swipeStartXPosition.value > swipeMoveXPosition.value) {
+    swipeOffset.value = positionDelta
+  } else {
+    swipeOffset.value = swipeOffsetMax.value + positionDelta
+  }
 }
 const handleTouchEnd = () => {
+  isAddSwipeTransition.value = true
   showBodyScroll()
   if (swipeStartXPosition.value > swipeMoveXPosition.value) {
     handleShowButtons()
@@ -58,10 +60,7 @@ const handleTouchEnd = () => {
 </script>
 
 <template>
-  <div
-    ref="swipeContainer"
-    class="flex w-full overflow-hidden"
-  >
+  <div class="flex w-full overflow-hidden">
     <div
       class="px-4 py-7 bg-white rounded-lg text-black flex items-center cursor-pointer min-w-full"
       :class="{ 'transition-all delay-300': isAddSwipeTransition }"
@@ -70,11 +69,13 @@ const handleTouchEnd = () => {
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
     >
-      <img
-        :src="product.productImageUrl"
-        alt="Product image"
-        class="mr-4 w-32"
-      >
+      <div class="mr-4 w-32 flex items-center justify-center">
+        <img
+          :src="product.productImageUrl"
+          alt="Product image"
+          class="w-auto max-w-32 min-h-16 max-h-16"
+        >
+      </div>
       <div>
         <p class="text-xl font-medium">
           {{ product.productName }}
