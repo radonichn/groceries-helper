@@ -3,9 +3,3 @@ export interface IProductItem {
   productCode: string;
   productImageUrl: string;
 }
-
-export interface ITouchXPositions {
-  startX: number
-  moveX: number
-  endX: number
-}

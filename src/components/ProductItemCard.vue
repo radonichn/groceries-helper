@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-import type { IProductItem, ITouchXPositions } from '@/types/productItem'
+import type { IProductItem } from '@/types/productItem'
 import type { IActionButton } from '@/types/common'
+import { hideBodyScroll, showBodyScroll } from '@/utils/overflow-helper'
 
 defineProps<{
   product: IProductItem
@@ -36,6 +37,7 @@ const handleHideButtons = () => {
 const getTouchXPosition = (event: TouchEvent) => event.touches[0].pageX
 const handleTouchStart = (event: TouchEvent) => {
   swipeStartXPosition.value = getTouchXPosition(event)
+  hideBodyScroll()
 }
 const handleTouchMove = (event: TouchEvent) => {
   if (!swipeContainer.value) {
@@ -46,7 +48,7 @@ const handleTouchMove = (event: TouchEvent) => {
   swipeMoveXPosition.value = getTouchXPosition(event)
 }
 const handleTouchEnd = () => {
-  console.log(swipeStartXPosition.value, swipeMoveXPosition.value, `${swipeStartXPosition.value > swipeMoveXPosition.value} - is swipe to the left`)
+  showBodyScroll()
   if (swipeStartXPosition.value > swipeMoveXPosition.value) {
     handleShowButtons()
   } else {
