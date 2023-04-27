@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 import type { IProductItem } from '@/types/productItem'
 import type { IActionButton } from '@/types/common'
@@ -22,11 +22,15 @@ const actionButtons: IActionButton[] = [
   },
 ]
 
+const isAddSwipeTransition = ref<boolean>(false)
+const handleSetIsAddSwipeTransition = (value: boolean) => {
+  isAddSwipeTransition.value = value
+}
+
 const swipeOffset = ref<number>(0)
 const swipeOffsetMax = ref<number>(152)
 const swipeStartXPosition = ref<number>(0)
 const swipeMoveXPosition = ref<number>(0)
-const isAddSwipeTransition = ref<boolean>(false)
 const handleShowButtons = () => {
   swipeOffset.value = swipeOffsetMax.value
 }
@@ -35,7 +39,7 @@ const handleHideButtons = () => {
 }
 const getTouchXPosition = (event: TouchEvent) => event.touches[0].pageX
 const handleTouchStart = (event: TouchEvent) => {
-  isAddSwipeTransition.value = false
+  handleSetIsAddSwipeTransition(false)
   swipeStartXPosition.value = getTouchXPosition(event)
   hideBodyScroll()
 }
@@ -49,13 +53,24 @@ const handleTouchMove = (event: TouchEvent) => {
   }
 }
 const handleTouchEnd = () => {
-  isAddSwipeTransition.value = true
+  handleSetIsAddSwipeTransition(true)
   showBodyScroll()
   if (swipeStartXPosition.value > swipeMoveXPosition.value) {
     handleShowButtons()
   } else {
     handleHideButtons()
   }
+}
+
+const handleToggleRightMouseClick = () => {
+  handleSetIsAddSwipeTransition(true)
+  nextTick(() => {
+    if (!swipeOffset.value) {
+      handleShowButtons()
+    } else {
+      handleHideButtons()
+    }
+  })
 }
 </script>
 
@@ -68,6 +83,8 @@ const handleTouchEnd = () => {
       @touchstart="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
+      @click="handleHideButtons"
+      @contextmenu.prevent="handleToggleRightMouseClick"
     >
       <div class="mr-4 w-32 flex items-center justify-center">
         <img

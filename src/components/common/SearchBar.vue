@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import {
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/vue/24/solid'
+
 
 const props = defineProps<{
   modelValue: string
@@ -14,14 +19,23 @@ const value = computed<string>({
     emit('update:modelValue', value)
   },
 })
+const handleReset = () => value.value = ''
 
 </script>
 
 <template>
-  <input
-    v-model="value"
-    type="text"
-    class="py-2 px-3 rounded-lg w-full text-black"
-    placeholder="Enter product name"
-  >
+  <div class="relative">
+    <MagnifyingGlassIcon class="h-full w-4 absolute left-2 top-0 text-black z-10" />
+    <input
+      v-model="value"
+      type="text"
+      class="py-2 px-8 rounded-lg w-full text-black"
+      placeholder="Enter product name"
+    >
+    <XMarkIcon
+      v-if="value"
+      class="h-full w-4 absolute right-2 top-0 text-black z-10 cursor-pointer"
+      @click="handleReset"
+    />
+  </div>
 </template>
