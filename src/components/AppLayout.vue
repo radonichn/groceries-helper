@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import type { IProductItem } from '@/types/productItem'
 import ProductItemCard from '@/components/ProductItemCard.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
+import ModalDialog from '@/components/common/ModalDialog.vue'
 
 const products: IProductItem[] = [
   {
@@ -22,9 +23,15 @@ const searchText = ref<string>('')
 const filteredProducts = computed<IProductItem[]>(() => products.filter(v =>
   v.productName.toLowerCase().includes(searchText.value.toLowerCase())),
 )
+
+const isModalVisible = ref<boolean>(true)
 </script>
 
 <template>
+  <ModalDialog
+    v-model="isModalVisible"
+    title="Add new product"
+  />
   <SearchBar v-model="searchText" />
   <ProductItemCard
     v-for="product of filteredProducts"
