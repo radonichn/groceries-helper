@@ -29,7 +29,7 @@ const handleReset = () => value.value = ''
     <input
       v-model="value"
       type="text"
-      class="py-2 px-8 rounded-lg w-full text-black"
+      class="py-2 px-8 rounded-lg w-full text-black placeholder-gray-500 bg-indigo-300"
       placeholder="Enter product name"
     >
     <XMarkIcon

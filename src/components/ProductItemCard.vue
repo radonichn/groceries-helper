@@ -13,12 +13,10 @@ defineProps<{
 const actionButtons: IActionButton[] = [
   {
     icon: PencilIcon,
-    classes: 'bg-blue-600',
     onClick: () => {},
   },
   {
     icon: TrashIcon,
-    classes: 'bg-red-600',
     onClick: () => {},
   },
 ]
@@ -78,7 +76,7 @@ const handleToggleRightMouseClick = () => {
 <template>
   <div class="flex w-full overflow-hidden">
     <div
-      class="px-4 py-7 bg-white rounded-lg text-black flex items-center cursor-pointer min-w-full"
+      class="px-4 py-7 rounded-lg text-black flex items-center cursor-pointer min-w-full bg-gradient-to-r from-indigo-900/0 to-white/40"
       :class="{ 'transition-all delay-300': isAddSwipeTransition }"
       :style="{ marginLeft: `-${swipeOffset}px` }"
       @touchstart="handleTouchStart"
@@ -94,7 +92,7 @@ const handleToggleRightMouseClick = () => {
           class="w-auto max-w-32 min-h-16 max-h-16"
         >
       </div>
-      <div>
+      <div class="text-white">
         <p class="text-xl font-medium">
           {{ product.productName }}
         </p>
@@ -107,8 +105,7 @@ const handleToggleRightMouseClick = () => {
       <div
         v-for="actionButton of actionButtons"
         :key="actionButton.icon"
-        :class="actionButton.classes"
-        class="h-full w-14 flex items-center justify-center ml-3 rounded-lg cursor-pointer transition-transform active:scale-95"
+        class="h-full w-14 flex items-center justify-center ml-3 rounded-lg bg-indigo-700 cursor-pointer transition-transform active:scale-95"
         @click="actionButton.onClick"
       >
         <component
